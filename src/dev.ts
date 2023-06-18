@@ -1,0 +1,5 @@
+const bootstrap = () => {
+	
+}
+
+bootstrap()
