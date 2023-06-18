@@ -5,6 +5,31 @@ A simple template language engine for Typescript
 npm i templify-js
 ```
 
+## Using
+Simple import Templify class and create new instance with template string. Then call render method with data object. That's all.
+
+```typescript
+import { Templify } from 'templify-js';
+
+const template = `
+	<h1>{{ title }}</h1>
+	<ul>
+		{% foreach:skills %}
+			<li>{{ item }}</li>
+		{% endforeach %}
+	</ul>
+`;
+
+const data = {
+	title: 'My skills',
+	skills: ['HTML', 'CSS', 'JS']
+};
+
+const templify = new Templify(template);
+
+const output = templify.render(data);
+```
+
 ## Language
 
 ### Simple variable print
