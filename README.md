@@ -146,3 +146,32 @@ How big is ELEPHANT
 ```html
 <p>You are adult</p>
 ```
+## Register custom pipe
+You can add your own pipe to Templify. Just call `addPipe` method with pipe name and function. Function must return string.
+
+**Example:**
+```typescript
+import { Templify } from 'templify-js';
+
+const template = `
+	<h1>{{ title|trim }}</h1>
+`;
+
+const data = {
+	title: '  My title  '
+};
+
+const templify = new Templify(template);
+
+templify.addPipe('trim', (value: string) => {
+	return value.trim();
+});
+
+const output = templify.render(data);
+```
+
+**Output:**
+```html
+<h1>My title</h1>
+```
+
