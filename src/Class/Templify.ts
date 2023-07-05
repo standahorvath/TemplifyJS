@@ -14,20 +14,20 @@ export class Templify {
         let output = template;
 
         // Replace simple variable print
-        output = output.replace(/{{\s*([\w.]+)\s*}}/g, (match, variable) => {
+        output = output.replace(/{{\s*([\w.-]+)\s*}}/g, (match, variable) => {
             const value = this.getPropertyValue(data, variable);
             return value !== undefined ? value : match;
         });
 
         // Replace variable with pipe
-        output = output.replace(/{{\s*([\w.]+)\s*\|\s*([\w.]+)\s*}}/g, (match, variable, pipe) => {
+        output = output.replace(/{{\s*([\w.-]+)\s*\|\s*([\w.-]+)\s*}}/g, (match, variable, pipe) => {
             const value = this.getPropertyValue(data, variable);
             return value !== undefined ? this.applyPipe(value, pipe) : match;
         });
 
         // Replace foreach loops
         output = output.replace(
-            /{%\s*foreach:([\w.]+)\s*%}(.*?)\{%\s*endforeach\s*%}/gs,
+            /{%\s*foreach:([\w.-]+)\s*%}(.*?)\{%\s*endforeach\s*%}/gs,
             (match, variable, content) => {
                 const list = this.getPropertyValue(data, variable);
                 if (Array.isArray(list)) {
@@ -39,7 +39,7 @@ export class Templify {
 
         // Replace if statements
         output = output.replace(
-            /{%\s*if:([\w.]+)\s*%}(.*?)({%\s*else\s*%}(.*?))?{%\s*endif\s*%}/gs,
+            /{%\s*if:([\w.-]+)\s*%}(.*?)({%\s*else\s*%}(.*?))?{%\s*endif\s*%}/gs,
             (match, condition, ifContent, elseStatement, elseContent) => {
                 const value = this.getPropertyValue(data, condition);
                 if (value) {
