@@ -4,7 +4,7 @@
         "type": "git",
         "url": "https://github.com/standahorvath/TemplifyJS.git"
     },
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "A simple template language engine for Typescript",
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",
@@ -15,6 +15,7 @@
         "dev": "nodemon src/dev.ts",
         "start": "node index.ts",
         "test": "jest",
+        "coverage": "jest --coverage",
         "build": "del-cli ./lib && del-cli ./build && npm run build:esm",
         "build:esm": "tsc",
         "pre-publish": "npm run build && npm run test"

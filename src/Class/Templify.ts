@@ -31,24 +31,75 @@ export class Templify {
             (match, variable, content) => {
                 const list = this.getPropertyValue(data, variable);
                 if (Array.isArray(list)) {
-                    return list.map(item => this.render({ ...data, item }, content)).join('');
+                    return list.map((item, index) => this.render({ ...data, item, index }, content)).join('');
                 }
                 return match;
             }
         );
 
-        // Replace if statements
-        output = output.replace(
-            /{%\s*if:([\w.-]+)\s*%}(.*?)({%\s*else\s*%}(.*?))?{%\s*endif\s*%}/gs,
-            (match, condition, ifContent, elseStatement, elseContent) => {
-                const value = this.getPropertyValue(data, condition);
-                if (value) {
-                    return this.render(data, ifContent);
-                }
-                return elseContent ? this.render(data, elseContent) : '';
-            }
-        );
+        // Replace if statements, recursive
+        output = this.renderNestedIfElse(output, data);
 
+        // Clear unused variables
+        output = output.replace(/{{\s*([\w.-]+)\s*}}/g, '');
+
+        return output;
+    }
+
+    private renderNestedIfElse(input: string, data: any) {
+        let output = '';
+        let currentIndex = 0;
+    
+        while (currentIndex < input.length) {
+            const ifStart = input.indexOf('{%', currentIndex);
+            if (ifStart === -1) {
+                output += input.slice(currentIndex);
+                break;
+            }
+    
+            output += input.slice(currentIndex, ifStart);
+    
+            const ifEnd = input.indexOf('%}', ifStart);
+            if (ifEnd === -1) {
+                // Handle error: unterminated if block
+                break;
+            }
+    
+            const ifBlock = input.slice(ifStart, ifEnd + 2);
+            const conditionMatch = ifBlock.match(/{%\s*if:([\w.-]+)\s*%}/);
+            if (!conditionMatch) {
+                // Handle error: invalid if block
+                break;
+            }
+    
+            const condition = conditionMatch[1];
+            const value = this.getPropertyValue(data, condition);
+            const contentStart = ifEnd + 2;
+            let contentEnd, elseStart, elseContent;
+    
+            if (value) {
+                contentEnd = input.indexOf('{%', contentStart);
+                elseStart = input.indexOf('{% else %}', contentStart);
+            } else {
+                elseStart = input.indexOf('{% else %}', contentStart);
+                contentEnd = elseStart !== -1 ? elseStart : input.indexOf('{%', contentStart);
+            }
+    
+            if (elseStart !== -1 && elseStart < contentEnd) {
+                elseContent = input.slice(elseStart + 10, contentEnd);
+            }
+    
+            const content = input.slice(contentStart, contentEnd);
+    
+            if (value) {
+                output += this.renderNestedIfElse(content, data);
+            } else if (elseContent) {
+                output += this.renderNestedIfElse(elseContent, data);
+            }
+    
+            currentIndex = contentEnd;
+        }
+    
         return output;
     }
 
@@ -71,7 +122,6 @@ export class Templify {
                 return this.pipes[pipe](value);
             } catch (e) {
                 console.log("Error in pipe: " + pipe)
-                console.error(e)
             }
         }
         // Default pipes
