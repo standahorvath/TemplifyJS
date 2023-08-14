@@ -1,12 +1,12 @@
 export class Templify {
     private template: string;
-    private pipes: { [key: string]: (value: any) => any } = {};
+    private pipes: { [key: string]: (value: any, arg?: string) => any } = {};
 
     constructor(template: string) {
         this.template = template;
     }
 
-    public addPipe(name: string, callback: (value: any) => any): void {
+    public addPipe(name: string, callback: (value: any, arg?: string) => any): void {
         this.pipes[name] = callback;
     }
 
@@ -17,6 +17,12 @@ export class Templify {
         output = output.replace(/{{\s*([\w.-]+)\s*}}/g, (match, variable) => {
             const value = this.getPropertyValue(data, variable);
             return value !== undefined ? value : match;
+        });
+
+        // Replace variable with pipe and arguments
+        output = output.replace(/{{\s*([\w.-]+)\s*\|\s*([\w.-]+)\s*:\s*([\w.-]+)\s*}}/g, (match, variable, pipe, args) => {
+            const value = this.getPropertyValue(data, variable);
+            return value !== undefined ? this.applyPipe(value, pipe, args) : match;
         });
 
         // Replace variable with pipe
@@ -76,11 +82,11 @@ export class Templify {
         return value;
     }
 
-    private applyPipe(value: any, pipe: string): any {
+    private applyPipe(value: any, pipe: string, arg?: string): any {
         // Custom pipes
         if (Object.keys(this.pipes).indexOf(pipe) !== -1 && typeof this.pipes[pipe] === 'function') {
             try {
-                return this.pipes[pipe](value);
+                return this.pipes[pipe](value, arg);
             } catch (e) {
                 console.log("Error in pipe: " + pipe)
             }

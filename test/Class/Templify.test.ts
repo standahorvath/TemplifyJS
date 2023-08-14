@@ -21,6 +21,13 @@ describe('Templify', () => {
         expect(result).toBe('Name reversed: ecilA');
     });
 
+    it('should render pipe with arg', () => {
+        templify.addPipe('add', (value, arg) => value + ' ' + arg);
+        const data = { name: 'Alice' };
+        const result = templify.render(data, 'Name with arg: {{ name | add: Smith }}');
+        expect(result).toBe('Name with arg: Alice Smith');
+    })
+
     it('should render foreach loop', () => {
         const data = { items: ['Apple', 'Banana', 'Cherry'] };
         const template = `Fruits: {% foreach:items %}{{ item }} {% endforeach %}`;

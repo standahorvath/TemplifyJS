@@ -1,52 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1692020115977" clover="3.2.0">
-  <project timestamp="1692020115977" name="All files">
-    <metrics statements="42" coveredstatements="39" conditionals="22" coveredconditionals="18" methods="11" coveredmethods="11" elements="75" coveredelements="68" complexity="0" loc="42" ncloc="42" packages="2" files="2" classes="2"/>
+<coverage generated="1692021568292" clover="3.2.0">
+  <project timestamp="1692021568293" name="All files">
+    <metrics statements="45" coveredstatements="42" conditionals="24" coveredconditionals="19" methods="12" coveredmethods="12" elements="81" coveredelements="73" complexity="0" loc="45" ncloc="45" packages="2" files="2" classes="2"/>
     <package name="Class">
-      <metrics statements="41" coveredstatements="38" conditionals="22" coveredconditionals="18" methods="11" coveredmethods="11"/>
+      <metrics statements="44" coveredstatements="41" conditionals="24" coveredconditionals="19" methods="12" coveredmethods="12"/>
       <file name="Templify.ts" path="C:\Users\Standa\Desktop\Work\Personal\TemplifyJS\src\Class\Templify.ts">
-        <metrics statements="41" coveredstatements="38" conditionals="22" coveredconditionals="18" methods="11" coveredmethods="11"/>
-        <line num="3" count="12" type="stmt"/>
-        <line num="6" count="12" type="stmt"/>
-        <line num="10" count="2" type="stmt"/>
-        <line num="14" count="24" type="stmt"/>
-        <line num="17" count="24" type="stmt"/>
+        <metrics statements="44" coveredstatements="41" conditionals="24" coveredconditionals="19" methods="12" coveredmethods="12"/>
+        <line num="3" count="13" type="stmt"/>
+        <line num="6" count="13" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="14" count="25" type="stmt"/>
+        <line num="17" count="25" type="stmt"/>
         <line num="18" count="14" type="stmt"/>
         <line num="19" count="14" type="cond" truecount="2" falsecount="0"/>
-        <line num="23" count="24" type="stmt"/>
-        <line num="24" count="3" type="stmt"/>
-        <line num="25" count="3" type="cond" truecount="1" falsecount="1"/>
-        <line num="29" count="24" type="stmt"/>
-        <line num="32" count="2" type="stmt"/>
-        <line num="33" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="34" count="6" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="41" count="24" type="stmt"/>
-        <line num="42" count="24" type="stmt"/>
-        <line num="43" count="6" type="stmt"/>
-        <line num="46" count="7" type="stmt"/>
-        <line num="49" count="7" type="stmt"/>
-        <line num="50" count="7" type="cond" truecount="2" falsecount="0"/>
-        <line num="51" count="6" type="stmt"/>
-        <line num="52" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="55" count="1" type="stmt"/>
-        <line num="62" count="24" type="stmt"/>
-        <line num="64" count="24" type="stmt"/>
-        <line num="68" count="26" type="stmt"/>
-        <line num="69" count="26" type="stmt"/>
-        <line num="70" count="26" type="stmt"/>
-        <line num="71" count="26" type="cond" truecount="5" falsecount="0"/>
-        <line num="72" count="5" type="stmt"/>
-        <line num="74" count="21" type="stmt"/>
-        <line num="76" count="21" type="stmt"/>
-        <line num="81" count="3" type="cond" truecount="4" falsecount="0"/>
-        <line num="82" count="2" type="stmt"/>
-        <line num="83" count="2" type="stmt"/>
-        <line num="85" count="1" type="stmt"/>
-        <line num="89" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="91" count="0" type="stmt"/>
-        <line num="93" count="2" type="stmt"/>
+        <line num="23" count="25" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="29" count="25" type="stmt"/>
+        <line num="30" count="3" type="stmt"/>
+        <line num="31" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="35" count="25" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="39" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="40" count="6" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="47" count="25" type="stmt"/>
+        <line num="48" count="25" type="stmt"/>
+        <line num="49" count="6" type="stmt"/>
+        <line num="52" count="7" type="stmt"/>
+        <line num="55" count="7" type="stmt"/>
+        <line num="56" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="57" count="6" type="stmt"/>
+        <line num="58" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="68" count="25" type="stmt"/>
+        <line num="70" count="25" type="stmt"/>
+        <line num="74" count="27" type="stmt"/>
+        <line num="75" count="27" type="stmt"/>
+        <line num="76" count="27" type="stmt"/>
+        <line num="77" count="27" type="cond" truecount="5" falsecount="0"/>
+        <line num="78" count="5" type="stmt"/>
+        <line num="80" count="22" type="stmt"/>
+        <line num="82" count="22" type="stmt"/>
+        <line num="87" count="4" type="cond" truecount="4" falsecount="0"/>
+        <line num="88" count="3" type="stmt"/>
+        <line num="89" count="3" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
+        <line num="95" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="99" count="2" type="stmt"/>
       </file>
     </package>
     <package name="Constants">
