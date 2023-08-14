@@ -37,69 +37,30 @@ export class Templify {
             }
         );
 
-        // Replace if statements, recursive
-        output = this.renderNestedIfElse(output, data);
+        // Replace if statements
+        const ifElsePattern = /{%\s*if:([\w.-]+)\s*%}(?:(?!{%\s*(?:if:[\w.-]+|endif)\s*%}).)*(?:{%\s*else\s*%}(?:(?!{%\s*(?:if:[\w.-]+|endif)\s*%}).)*)?{%\s*endif\s*%}/gs
+        while (ifElsePattern.exec(output) !== null) {
+            output = output.replace(
+                ifElsePattern,
+                (match) => {
+                    return match.replace(
+                        /{%\s*if:([\w.-]+)\s*%}(.*?)({%\s*else\s*%}(.*?))?{%\s*endif\s*%}/gs,
+                        (match, condition, ifContent, elseStatement, elseContent) => {
+                            const value = this.getPropertyValue(data, condition);
+                            if (value) {
+                                return this.render(data, ifContent);
+                            } else if (elseContent) {
+                                return this.render(data, elseContent);
+                            }
+                            return '';
+                        })
+                }
+            );
+        };
 
         // Clear unused variables
         output = output.replace(/{{\s*([\w.-]+)\s*}}/g, '');
 
-        return output;
-    }
-
-    private renderNestedIfElse(input: string, data: any) {
-        let output = '';
-        let currentIndex = 0;
-    
-        while (currentIndex < input.length) {
-            const ifStart = input.indexOf('{%', currentIndex);
-            if (ifStart === -1) {
-                output += input.slice(currentIndex);
-                break;
-            }
-    
-            output += input.slice(currentIndex, ifStart);
-    
-            const ifEnd = input.indexOf('%}', ifStart);
-            if (ifEnd === -1) {
-                // Handle error: unterminated if block
-                break;
-            }
-    
-            const ifBlock = input.slice(ifStart, ifEnd + 2);
-            const conditionMatch = ifBlock.match(/{%\s*if:([\w.-]+)\s*%}/);
-            if (!conditionMatch) {
-                // Handle error: invalid if block
-                break;
-            }
-    
-            const condition = conditionMatch[1];
-            const value = this.getPropertyValue(data, condition);
-            const contentStart = ifEnd + 2;
-            let contentEnd, elseStart, elseContent;
-    
-            if (value) {
-                contentEnd = input.indexOf('{%', contentStart);
-                elseStart = input.indexOf('{% else %}', contentStart);
-            } else {
-                elseStart = input.indexOf('{% else %}', contentStart);
-                contentEnd = elseStart !== -1 ? elseStart : input.indexOf('{%', contentStart);
-            }
-    
-            if (elseStart !== -1 && elseStart < contentEnd) {
-                elseContent = input.slice(elseStart + 10, contentEnd);
-            }
-    
-            const content = input.slice(contentStart, contentEnd);
-    
-            if (value) {
-                output += this.renderNestedIfElse(content, data);
-            } else if (elseContent) {
-                output += this.renderNestedIfElse(elseContent, data);
-            }
-    
-            currentIndex = contentEnd;
-        }
-    
         return output;
     }
 

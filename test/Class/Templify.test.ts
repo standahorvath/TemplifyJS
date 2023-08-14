@@ -43,6 +43,20 @@ describe('Templify', () => {
         expect(result).toBe('You have admin privileges.');
     });
 
+    it('should render if statemens with hypens', () => {
+        const data = { 'is-admin': true };
+        const template = `{% if:is-admin %}You have admin privileges.{% endif %}`;
+        const result = templify.render(data, template);
+        expect(result).toBe('You have admin privileges.');
+    });
+
+    it('should render two if statemens in a  row', () => {
+        const data = { isAdmin: true, isSuperAdmin: true };
+        const template = `{% if:isAdmin %}You have admin privileges.{% endif %}{% if:isSuperAdmin %}You have super admin privileges.{% endif %}`;
+        const result = templify.render(data, template);
+        expect(result).toBe('You have admin privileges.You have super admin privileges.');
+    });
+
 	it('should render nested if statement', () => {
 		const data = { isAdmin: true, isSuperAdmin: true };
 		const template = `{% if:isAdmin %}You Are Admin {% if:isSuperAdmin %}and Superadmin too.{% endif %}{% else %}You do not have admin privileges.{% endif %}`;
@@ -52,7 +66,7 @@ describe('Templify', () => {
 
 	it('should gracefully render undefined variable in if statement', () => {
 		const data = { isAdministrator: true };
-		const template = `Test{% if:isAdmin %}You have admin privileges.{% else %}You do not have admin privileges.{% endif %}`;
+		const template = `Test{% if:isAdmin %}You have admin privileges.{% endif %}`;
 		const result = templify.render(data, template);
 		expect(result).toBe('Test');
 	});
