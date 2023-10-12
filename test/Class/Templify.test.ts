@@ -41,6 +41,21 @@ describe('Templify', () => {
 		const result = templify.render(data, template);
 		expect(result).toBe(`Fruits: 0: Apple 1: Banana 2: Cherry `);
 	});
+
+    it('should render inner foreach loop', () => {
+        const data = { items: [['Apple', 'Banana'], ['Cherry', 'Date']] };
+        const template = `Fruits: {% foreach:items %}{% foreach:item %}{{ item }} {% endforeach %}{% endforeach %}`;
+        const result = templify.render(data, template);
+        expect(result).toBe(`Fruits: Apple Banana Cherry Date `);
+    });
+
+    it('should render foreach loop with custom pipe', () => {
+        templify.addPipe('lower', (value) => value.toLowerCase());
+        const data = { items: ['Apple', 'Banana', 'Cherry'] };
+        const template = `Fruits: {% foreach:items %}{{ item | lower }} {% endforeach %}`;
+        const result = templify.render(data, template);
+        expect(result).toBe(`Fruits: apple banana cherry `);
+    });
 	
 
     it('should render if statement', () => {

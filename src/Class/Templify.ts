@@ -10,8 +10,57 @@ export class Templify {
         this.pipes[name] = callback;
     }
 
+    public simplify(template = this.template): string {
+        return template
+        .replace(/\s}}/g, '}}')
+        .replace(/{{\s/g, '{{')
+        .replace(/\s%}/g, '%}')
+        .replace(/{%\s/g, '{%')
+
+    }
+
     public render(data: any, template = this.template): string {
-        let output = template;
+
+        let output = this.simplify(template);
+
+        // Replace foreach loops deeply
+        while (output.indexOf('{%foreach:') !== -1) {
+            // Lets start with first foreach
+            const startForeach = output.indexOf('{%foreach:');
+            // Find the end of the foreach
+            let pointerPosition = startForeach + 10;
+            while(output.indexOf('{%foreach:', pointerPosition) < output.indexOf('{%endforeach%}', pointerPosition) && output.indexOf('{%foreach:', pointerPosition) !== -1) {
+                pointerPosition = output.indexOf('{%endforeach%}', pointerPosition) + 14;
+            }
+            const endForeach = output.indexOf('{%endforeach%}', pointerPosition);
+
+            // Get the foreach content
+            const content = output.substring(startForeach, endForeach + 14);
+            let subcontent = content.substring(content.indexOf('%}') + 2, content.lastIndexOf('{%'));
+            const variable = content.substring(content.indexOf(':') + 1, content.indexOf('%}')).replace(/\s/g, '')
+            const subdata = this.getPropertyValue(data, variable);
+            
+            if(subcontent.indexOf('{%foreach:') === -1) {
+                const foreachContent = content.replace(
+                    /{%\s*foreach:([\w.-]+)\s*%}(.*?)\{%\s*endforeach\s*%}/gs,
+                    (match, variable, content) => {
+                        const list = this.getPropertyValue(data, variable);
+                        if (Array.isArray(list)) {
+                            return list.map((item, index) => this.render({ ...subdata, item, index }, subcontent)).join('');
+                        }
+                        return match;
+                    }
+                );
+                output = output.replace(content, foreachContent)
+            } else {
+                if(Array.isArray(subdata)){
+                    output = output.replace(content, subdata.map((item, index) => this.render({ item, index, ...data }, subcontent), subcontent).join(''))
+                } else {
+                    output = output.replace(content, this.render({ item:subdata, ...data }, subcontent))
+                }
+            }
+            
+        }
 
         // Replace simple variable print
         output = output.replace(/{{\s*([\w.-]+)\s*}}/g, (match, variable) => {
@@ -31,7 +80,6 @@ export class Templify {
             return value !== undefined ? this.applyPipe(value, pipe) : match;
         });
 
-        // Replace foreach loops
         output = output.replace(
             /{%\s*foreach:([\w.-]+)\s*%}(.*?)\{%\s*endforeach\s*%}/gs,
             (match, variable, content) => {

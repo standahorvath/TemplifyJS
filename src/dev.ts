@@ -2,19 +2,9 @@ import { Templify } from './Class/Templify';
 
 const bootstrap = () => {
 
-	const template = `
-	<h1>{{ title|lower }}</h1>
-	<ul>
-		{% foreach:skills %}
-			<li>{{ item }}</li>
-		{% endforeach %}
-	</ul>
-`
+	const template = `Fruits: {% foreach:items %} {% foreach:item %}Fruit:{{ item }} {% endforeach %}{% endforeach %}`
 
-	const data = {
-		title: 'My skills',
-		skills: ['HTML', 'CSS', 'JS']
-	};
+	const data = { items: [['Apple', 'Banana'], ['Cherry', 'Date']] };
 
 	const templify = new Templify(template);
 	templify.addPipe('lower', (value: string) => value.toLowerCase())
