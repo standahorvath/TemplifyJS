@@ -4,7 +4,7 @@
         "type": "git",
         "url": "https://github.com/standahorvath/TemplifyJS.git"
     },
-    "version": "0.0.8",
+    "version": "0.0.10",
     "description": "A simple template language engine for Typescript",
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",

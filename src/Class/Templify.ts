@@ -16,6 +16,7 @@ export class Templify {
         .replace(/{{\s/g, '{{')
         .replace(/\s%}/g, '%}')
         .replace(/{%\s/g, '{%')
+        .replace(/{%foreach:\s/g, '{%foreach:')
 
     }
 
@@ -46,7 +47,7 @@ export class Templify {
                     (match, variable, matchcontent) => {
                         const list = this.getPropertyValue({...data, item:subdata}, variable);
                         if (Array.isArray(list)) {
-                            return list.map((item, index) => this.render({ ...subdata, item, index }, subcontent)).join('');
+                            return list.map((item, index) => {  return this.render({ ...subdata, index, ...data, item}, subcontent)}).join('');
                         } else {
                             return this.render({ ...subdata }, matchcontent);
                         }
@@ -55,9 +56,9 @@ export class Templify {
                 output = output.replace(content, this.render({...data, item:subdata}, foreachContent))
             } else {
                 if(Array.isArray(subdata)){
-                    output = output.replace(content, subdata.map((item, index) => this.render({ item, index, ...data }, subcontent)).join(''))
+                    output = output.replace(content, subdata.map((item, index) => this.render({ index, ...data, item }, subcontent)).join(''))
                 } else {
-                    output = output.replace(content, this.render({ item:subdata, ...data }, subcontent))
+                    output = output.replace(content, this.render({...data, item:subdata }, subcontent))
                 }
             }
             

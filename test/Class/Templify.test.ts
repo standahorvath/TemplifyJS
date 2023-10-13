@@ -42,12 +42,26 @@ describe('Templify', () => {
 		expect(result).toBe(`Fruits: 0: Apple 1: Banana 2: Cherry `);
 	});
 
+	it('should render foreach loop with global data', () => {
+		const data = { items: ['Apple', 'Banana', 'Cherry'], global: 'Global' };
+		const template = `Fruits: {% foreach:items %}{{ index }}: {{ global }} {{ item }} {% endforeach %}`;
+		const result = templify.render(data, template);
+		expect(result).toBe(`Fruits: 0: Global Apple 1: Global Banana 2: Global Cherry `);
+	});
+
     it('should render inner foreach loop', () => {
         const data = { items: [['Apple', 'Banana'], ['Cherry', 'Date']] };
         const template = `Fruits: {% foreach:items %}{% foreach:item %}{{ item }} {% endforeach %}{% endforeach %}`;
         const result = templify.render(data, template);
         expect(result).toBe(`Fruits: Apple Banana Cherry Date `);
     });
+
+    it('should render inner foreach loop 2', () => {
+        const data = { items: [['A', 'B'], ['1', '2']] };
+        const template = '{% foreach: items %}{% foreach: item %}{{ item }}{% endforeach %}{% endforeach %}';
+        const result = templify.render(data, template);
+        expect(result).toBe('AB12');
+      });
 
     it('should render foreach loop with custom pipe', () => {
         templify.addPipe('lower', (value) => value.toLowerCase());
@@ -105,6 +119,13 @@ describe('Templify', () => {
         expect(result).toBe('Name: Alice');
     });
 
+    it('should handle complex if-else statements', () => {
+        const data = { condition1: true, condition2: false, value: 'Hello' };
+        const template = `{% if:condition1 %}{% if:condition2 %}A{% else %}B{% endif %}{% else %}{% if:condition2 %}C{% else %}D{% endif %}{% endif %}`;
+        const result = templify.render(data, template);
+        expect(result).toBe('B');
+      });
+
     it('should handle error in custom pipe gracefully', () => {
         templify.addPipe('errorPipe', () => {
             throw new Error('Custom pipe error');
@@ -113,4 +134,10 @@ describe('Templify', () => {
         const result = templify.render(data, '{{ value | errorPipe }}');
         expect(result).toBe('data');
     });
+
+    it('should handle undefined variables', () => {
+        const data = { name: 'Alice' };
+        const result = templify.render(data, 'Hello, {{ age }}!');
+        expect(result).toBe('Hello, !');
+      });
 });
