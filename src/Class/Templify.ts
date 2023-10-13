@@ -95,7 +95,7 @@ export class Templify {
                             const conditions = condition.split('==').map((item:string) => item.trim());
                             let value = null
                             if(conditions.length === 2) {
-                                value = this.getPropertyValue(data, conditions[0]) === conditions[1]
+                                value = String(this.getPropertyValue(data, conditions[0])) === String(conditions[1])
                             } else {
                                 value = this.getPropertyValue(data, condition);
                             }
