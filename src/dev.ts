@@ -2,9 +2,9 @@ import { Templify } from './Class/Templify';
 
 const bootstrap = () => {
 
-	const template = '{% foreach: items %}{% foreach: item %}{{ item }}{% endforeach %}{% endforeach %}';
+	const template = `{% if:is-admin %}You have admin privileges.{% endif %}`;
     console.log(template)
-	const data = { items: [['A', 'B'], ['1', '2']] };
+	const data = { 'is-admin': true };
     console.log(data)
 	const templify = new Templify(template);
 	templify.addPipe('lower', (value: string) => value.toLowerCase())

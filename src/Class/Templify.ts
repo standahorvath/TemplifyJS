@@ -82,27 +82,24 @@ export class Templify {
             return value !== undefined ? this.applyPipe(value, pipe) : match;
         });
 
-        output = output.replace(
-            /{%\s*foreach:([\w.-]+)\s*%}(.*?)\{%\s*endforeach\s*%}/gs,
-            (match, variable, content) => {
-                const list = this.getPropertyValue(data, variable);
-                if (Array.isArray(list)) {
-                    return list.map((item, index) => this.render({ ...data, item, index }, content)).join('');
-                }
-                return match;
-            }
-        );
-
         // Replace if statements
-        const ifElsePattern = /{%\s*if:([\w.-]+)\s*%}(?:(?!{%\s*(?:if:[\w.-]+|endif)\s*%}).)*(?:{%\s*else\s*%}(?:(?!{%\s*(?:if:[\w.-]+|endif)\s*%}).)*)?{%\s*endif\s*%}/gs
+        const ifElsePattern = /{%\s*if:([\w.\-=\s]+)\s*%}(?:(?!{%\s*(?:if:[\w.\-=\s]+|endif)\s*%}).)*(?:{%\s*else\s*%}(?:(?!{%\s*(?:if:[\w.\-=\s]+|endif)\s*%}).)*)?{%\s*endif\s*%}/gs
         while (ifElsePattern.exec(output) !== null) {
             output = output.replace(
                 ifElsePattern,
                 (match) => {
                     return match.replace(
-                        /{%\s*if:([\w.-]+)\s*%}(.*?)({%\s*else\s*%}(.*?))?{%\s*endif\s*%}/gs,
+                        /{%\s*if:([\w.\-=\s]+)\s*%}(.*?)({%\s*else\s*%}(.*?))?{%\s*endif\s*%}/gs,
                         (match, condition, ifContent, elseStatement, elseContent) => {
-                            const value = this.getPropertyValue(data, condition);
+
+                            const conditions = condition.split('==').map((item:string) => item.trim());
+                            let value = null
+                            if(conditions.length === 2) {
+                                value = this.getPropertyValue(data, conditions[0]) === conditions[1]
+                            } else {
+                                value = this.getPropertyValue(data, condition);
+                            }
+
                             if (value) {
                                 return this.render(data, ifContent);
                             } else if (elseContent) {

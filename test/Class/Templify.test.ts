@@ -79,6 +79,13 @@ describe('Templify', () => {
         expect(result).toBe('You have admin privileges.');
     });
 
+    it('should render if statement compare', () => {
+        const data = { role: "admin" };
+        const template = `{% if:role == admin %}You have admin privileges.{% else %}You do not have admin privileges.{% endif %}`;
+        const result = templify.render(data, template);
+        expect(result).toBe('You have admin privileges.');
+    });
+
     it('should render if statemens with hypens', () => {
         const data = { 'is-admin': true };
         const template = `{% if:is-admin %}You have admin privileges.{% endif %}`;

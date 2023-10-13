@@ -1,6 +1,17 @@
 # TemplifyJS
 A simple template language engine for Typescript
 
+## Introduction
+Templify is a versatile JavaScript library that simplifies template rendering by allowing you to create templates with placeholders and easily render them with data. This library is designed to be flexible and user-friendly, making it suitable for a wide range of applications.
+
+## Key Features
+Variable Rendering: Templify supports the rendering of simple variables within templates, making it easy to inject dynamic data into your content.
+
+- **Custom Pipes**: You can create custom pipes to modify and format data within templates. Templify provides the ability to define and apply custom pipes, enhancing the flexibility of your template rendering.
+- **Foreach Loops**: Templify simplifies the rendering of collections by supporting foreach loops. You can easily iterate through arrays or lists and render the content accordingly.
+- **Conditional Statements**: The library allows you to include if-else statements in your templates, making it possible to conditionally render content based on the provided data.
+- **Nested Structures**: Templify supports nested structures, enabling the rendering of complex data structures and nested loops with ease.
+
 ```shell
 npm i templify-js
 ```
