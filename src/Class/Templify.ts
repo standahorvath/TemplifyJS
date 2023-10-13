@@ -43,18 +43,19 @@ export class Templify {
             if(subcontent.indexOf('{%foreach:') === -1) {
                 const foreachContent = content.replace(
                     /{%\s*foreach:([\w.-]+)\s*%}(.*?)\{%\s*endforeach\s*%}/gs,
-                    (match, variable, content) => {
-                        const list = this.getPropertyValue(data, variable);
+                    (match, variable, matchcontent) => {
+                        const list = this.getPropertyValue({...data, item:subdata}, variable);
                         if (Array.isArray(list)) {
                             return list.map((item, index) => this.render({ ...subdata, item, index }, subcontent)).join('');
+                        } else {
+                            return this.render({ ...subdata }, matchcontent);
                         }
-                        return match;
                     }
                 );
-                output = output.replace(content, foreachContent)
+                output = output.replace(content, this.render({...data, item:subdata}, foreachContent))
             } else {
                 if(Array.isArray(subdata)){
-                    output = output.replace(content, subdata.map((item, index) => this.render({ item, index, ...data }, subcontent), subcontent).join(''))
+                    output = output.replace(content, subdata.map((item, index) => this.render({ item, index, ...data }, subcontent)).join(''))
                 } else {
                     output = output.replace(content, this.render({ item:subdata, ...data }, subcontent))
                 }
